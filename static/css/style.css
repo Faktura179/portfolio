@@ -1,0 +1,256 @@
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    padding:0;
+    color:white;
+    font-family: 'Inconsolata';
+}
+nav{
+    background: rgb(40, 40, 50);
+    position: fixed;
+    width: 100%;
+    padding:1px 0;
+    max-height:60px
+}
+nav ul{
+    list-style-type: none;
+    float: right;
+    margin-right: 40px;
+}
+nav li{
+    display: inline-block;
+    box-sizing: border-box;
+}
+nav li a{
+   text-decoration: none; 
+   color:white;
+   padding:5px;
+}
+
+header{
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+h1{
+    font-family: 'Caveat';
+    text-align: center;
+    font-size: 7em;
+}
+h2{
+    text-align: center;
+}
+
+#content{
+    font-size: 1.2em;
+    background: rgb(40, 40, 50);
+    margin-bottom: 20px;
+}
+
+section{
+    margin:50px 0;
+}
+section:last-of-type{
+    margin-bottom: 0;
+}
+section > div{
+    padding: 20px 20px;
+}
+.anchor{
+    position: relative;
+    top:-65px;
+    visibility: hidden;
+    height: 0;
+    width: 0;
+}
+
+#about{
+    /*background: #373C4A;*/
+    background: #303840;
+    text-align: center;
+}
+#portfolio{
+    background: #303840;
+}
+
+h3{
+    text-align: center;
+    font-size: 2em;
+}
+h4{
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.projekty{
+    margin:10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap:wrap;
+}
+.projekt>a{
+    color:white;
+    text-decoration: none;
+    display: contents;
+}
+.projekt{
+    background: #3D374A;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 15px;
+    margin:15px;
+    width:200px;
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 0 0 3px #999999;
+}
+.projekt img{
+    width:200px;
+    height:250px;
+}
+
+#contact{
+    background: #303840;
+    text-align: center;
+}
+#contcontainer{
+    position: relative;
+    display: inline-block;
+    box-shadow: 0 0 10px rgb(68, 76, 84);
+    background-color: rgb(52, 60, 68);
+    border-radius: 5px;
+    /*border:1px solid #fff;
+    background-color: #3D374A;*/
+}
+#contactform{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding:20px;
+}
+.line{
+    display: flex;
+    margin-bottom: 30px;
+}
+
+input, textarea{
+    background: none;
+    border: none;
+    color:white;
+    font-size: 1.2em;
+    resize: none;
+    width:300px;
+    z-index: 2;
+    margin-top: 20px;
+    border-bottom: 1px solid #666;
+    border-top: 1px solid #666;
+}
+textarea{
+    width:610px;
+}
+#contactform button{
+    background: rgb(61, 55, 74);
+    border: 1px solid white;
+    border-radius: 5px;
+    padding:10px 20px;
+    color:white;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+@media (max-width: 650px){
+    .line{
+        display: block;
+    }
+    textarea{
+        width:300px;
+    }
+}
+input:focus, textarea:focus{
+    outline: none;
+}
+#name {
+    margin-right: 10px;
+}
+#name, #email, #msg{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #ccc;
+    position: relative;
+}
+
+.tag{
+    position: absolute;
+
+    top:25px;
+    left: 5px;
+    transition: top 500ms, left 500ms;
+}
+
+input:focus + .tag, textarea:focus + .tag, input:not(:placeholder-shown) + .tag, textarea:not(:placeholder-shown) + .tag{
+    top:-10px;
+    left: 5px;
+    transition: top 500ms, left 500ms;
+}
+
+#contpopup{
+    opacity: 0;
+    position: absolute;
+    background: #a00;
+    bottom:-45px;
+    left:50%;
+    margin-left: -106px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 3;
+    transition: opacity 500ms;
+}
+
+#contpopup::after{
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent #a00 transparent;
+  }
+
+.parallax-window {
+    
+    background: transparent;
+    overflow: auto;
+}
+footer{
+    margin-top: 5px;
+    font-size: 10px;
+}
+#footer{
+    display: flex;
+    flex: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;   
+    background: rgb(40, 40, 50);
+    padding: 5px 15px;
+}
+
+.socialMedia{
+    height:25px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    height:48px;
+}
+.social{
+    margin:0 20px;
+}
+.social img{
+    width:48px;
+}

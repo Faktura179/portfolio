@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rafał Fatuła</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Caveat|Inconsolata&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/8b293f0aa7.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="js/parallax.min.js"></script>
+    
+</head>
+<body>
+    <div class="parallax-window" data-parallax="scroll"  data-position-y="-200px">
+        <script>
+            if($(window).width()<=1920)
+                $('.parallax-window').parallax({imageSrc: 'imgs/dawn1080p.jpg'});
+            else if($(window).width()>2560)
+                $('.parallax-window').parallax({imageSrc: 'imgs/dawn.jpg'});
+            else if($(window).width()>1920)
+                $('.parallax-window').parallax({imageSrc: 'imgs/dawn1440p.jpg'});
+        </script>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#aboutA">About</a></li>
+                <li><a href="#portfolioA">Portfolio</a></li>
+                <li><a href="#contactA">Kontakt</a></li>
+                <li><a href="/resume.pdf">Resume</a></li>
+            </ul>
+        </nav>
+        <header id="home">
+            <h1>
+                Rafał Fatuła
+            </h1>
+            <h2>
+                Web developer / Programista
+            </h2>
+        </header>
+        
+        <div id="content">
+            <section>
+                <div id="about">
+                    <div id="aboutA" class="anchor"></div>
+                    Jestem uczniem Technikum Łączności w Krakowie. Swoje umiejętności zdobyłem na zajęciach w szkole oraz rozwijając swoje zainteresowania związane 
+                    z informatyką i programowaniem.
+                </div>
+            </section>
+            <section>
+                <div id="portfolio">
+                    <div id="portfolioA" class="anchor"></div>
+                    <h3>Moje projekty:</h3> 
+                    <h4>Web</h4>
+                    <div class="projekty">
+                        <div class="projekt">
+                            <a href="/statki">
+                                Statki
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>
+                        <div class="projekt">
+                            <a href="/przesuwanie">
+                                Przesuwanie
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>  
+                        <div class="projekt">
+                            <a href="/mp3">
+                                Mp3
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>
+                        <div class="projekt">
+                            <a href="/dratewka">
+                                Dratewka
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>                                           
+                        <div class="projekt">
+                            <a href="/Lego">
+                                Lego
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>
+                        <div class="projekt">
+                            <a href="/kulki">
+                                Kulki
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>
+                    </div>
+                    <hr/>
+                    <h4>C++</h4>
+                    <div class="projekty">      
+                        <div class="projekt">
+                            <a href="/gol">
+                                Game of Life
+                                <img src="?" alt="projekt">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div id="contact">
+                    <div id="contactA" class="anchor"></div>
+                    <div id="contcontainer">
+                        <h3>Napisz do mnie!</h3>
+                        <div id="contactform">
+                            <div class="line"><div id="name"><input type="text" name="imie" id="imie" placeholder=" "><label class="tag" for="imie"> Imie: </label></div> <div id="email"><input type="email" name="mail" id="mail"  placeholder=" "><label class="tag" for="mail">Email: </label><div id="contpopup">Nieprawidłowy email!</div></div></div>
+                            <div class="line"><div id="msg"><textarea name="wiad" id="wiad" cols="60" rows="5"  placeholder=" "></textarea><label class="tag" for="wiad">Wiadomość: </label></div></div>
+                            <div class="line"><button id="send">Wyślij <i class="fas fa-arrow-right"></i></button></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer>
+            <span class="socialMedia"> <a class="social" href="https://github.com/Faktura179"> <img src="imgs/github.png" alt="github"></a>  <a class="social" href="mailto:fatula.rafal@gmail.com"><i class="fas fa-envelope-square" style="font-size: 48px; color: #fff; text-decoration: none;"></i></a> <a class="social" href="https://www.linkedin.com/in/rafa%C5%82-fatu%C5%82a/"><img src="imgs/linkedin.png" alt="linkedin"></a> </span>
+            <div id="footer">
+                <span class="legal"> Obraz ze strony pexels.com  </span>
+                <span class="copyright"> © 2020 Copyright Rafał Fatuła </span>
+            </div>
+        </footer>
+    </div> 
+</body>
+<script src="js/scripts.js"></script>
+</html>
