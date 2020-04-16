@@ -4,7 +4,7 @@ var port = process.env.PORT || 3000,
     qs= require("querystring"),
     er404 = fs.readFileSync("static/404.html"),
     nodemailer = require('nodemailer'),
-    pass = require("password")
+    pass = require("./password")
 
 var extensions={
     html:"text/html",
