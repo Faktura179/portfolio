@@ -1,7 +1,10 @@
 var port = process.env.PORT || 3000,
     http = require('http'),
     fs = require('fs'),
-    er404 = fs.readFileSync("static/404.html")
+    qs= require("querystring"),
+    er404 = fs.readFileSync("static/404.html"),
+    nodemailer = require('nodemailer'),
+    pass = require("password")
 
 var extensions={
     html:"text/html",
@@ -15,6 +18,15 @@ var extensions={
     pdf:"application/pdf",
     ico:"image/x-icon",
 }
+var transporter = nodemailer.createTransport({
+    service: 'localhost',
+    auth: {
+      user: 'contact@rafalfatula.com',
+      pass: pass.password
+    }
+  });
+  
+  
 
 function readFiles(req,res){
     fs.readFile(__dirname+"/static"+req.url,function(err,data){
@@ -40,9 +52,25 @@ var server = http.createServer(function (req, res) {
         });
 
         req.on('end', function() {
+            var json = qs.parse(body)
             switch(req.url){
                 case "/contactme":
-                    res.end()
+                    console.log(json)
+                    var mailOptions = {
+                        from: 'contact@rafalfatula.com',
+                        to: 'rfatula12@gmail.com',
+                        subject: 'Wiadomość od '+json.name,
+                        text: json.message +'\n'+"Wysłane od: "+json.email
+                      };
+                      transporter.sendMail(mailOptions, function(error, info){
+                        if (error) {
+                          console.log(error);
+                          res.end()
+                        } else {
+                          console.log('Email sent: ' + info.response);
+                          res.end()
+                        }
+                      }); 
                     break;
             }
         });
