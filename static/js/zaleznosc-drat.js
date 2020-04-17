@@ -1,0 +1,22 @@
+var zaleznosci = {
+    "10": { "id": "10", "lokacja": " 56", "id2": " 11", "komunikat": " You opened a tool shed and took an axe" },
+    "11": { "id": "11", "lokacja": " 67", "id2": " 12", "komunikat": " You cut sticks for sheeplegs" },
+    "12": { "id": "12", "lokacja": " 43", "id2": " 13", "komunikat": " You prepared legs for your fake sheep" },
+    "14": { "id": "14", "lokacja": " 34", "id2": " 15", "komunikat": " The tavern owner paid you money" },
+    "15": { "id": "15", "lokacja": " 37", "id2": " 16", "komunikat": " The cooper sold you a new barrel" },
+    "16": { "id": "16", "lokacja": " 43", "id2": " 17", "komunikat": " You made a nice sheeptrunk" },
+    "18": { "id": "18", "lokacja": " 36", "id2": " 19", "komunikat": " The butcher gave you wool" },
+    "19": { "id": "19", "lokacja": " 43", "id2": " 20", "komunikat": " You prepared skin for your fake sheep" },
+    "21": { "id": "21", "lokacja": " 57", "id2": " 22", "komunikat": " You used your tools to make a rag" },
+    "22": { "id": "22", "lokacja": " 43", "id2": " 23", "komunikat": " You made a fake sheephead" },
+    "24": { "id": "24", "lokacja": " 11", "id2": " 25", "komunikat": " You are digging... (timeout) and digging... (timeout) That's enough sulphur for you" },
+    "25": { "id": "25", "lokacja": " 43", "id2": " 26", "komunikat": " You prepared a solid poison" },
+    "27": { "id": "27", "lokacja": " 21", "id2": " 28", "komunikat": " You got a bucket full of tar" },
+    "28": { "id": "28", "lokacja": " 43", "id2": " 29", "komunikat": " You prepared a liquid poison" },
+    "1": { "id": "1", "lokacja": "43", "id2": " 37", "komunikat": " Your fake sheep is full of poison and ready to be eaten by the dragon" },
+    "37": { "id": "37", "lokacja": " 43", "id2": " 30", "komunikat": " The dragon noticed your gift... (timeout) The dragon ate your sheep and died!" },
+    "33": { "id": "33", "lokacja": " 43", "id2": " 34", "komunikat": " You cut a piece of dragon's skin" },
+    "34": { "id": "34", "lokacja": " 57", "id2": " 35", "komunikat": " You used your tools to make shoes" },
+    "35": { "id": "35", "lokacja": " 41", "id2": " 36", "komunikat": " The King is impressed by your shoes" },
+    "36": {"id": "36", "lokacja": "00", "id2": " 36", "komunikat": " " }
+}

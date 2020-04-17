@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dratewka</title>
+    <script src="/js/dratewka.js"></script>
+    <script src="/js/items-drat.js"></script>
+    <script src="/js/zaleznosc-drat.js"></script>
+    <script>
+        //Clases ------------------------------------------------------------------------------
+        class Item{
+            constructor(id,string,flag,name){
+                this.id=id
+                this.string=string
+                this.flag=flag
+                this.name=name
+            }
+
+            what(){
+                return this.string
+            }
+
+            use(location){
+                var id =this.id
+                if(parseInt(zaleznosci[id].lokacja)!="00"){
+                    if(location==parseInt(zaleznosci[id].lokacja)){
+                        var L=false
+                        if(items[parseInt(zaleznosci[id].id2)].flag==0){
+                            sheepEl+=1
+                            map[game.getPos()].items.push(items[parseInt(zaleznosci[id].id2)])
+                            L=true
+                        }
+                        var kom=zaleznosci[id].komunikat.split("(timeout)")
+                        var func=function(){}
+                        if(game.item[0].id==37){
+                            dragKilled=true
+                            func=function(){map[game.getPos()].image="DS68.bmp";map[game.getPos()].show()}
+                        }
+                        if(game.item[0].id==33 && dragKilled==false){
+                            game.message("Nothing happened")
+                            return
+                        }
+
+                        if(sheepEl==6 && dragKilled==false){
+                            game.message(kom[0],function(){game.message(zaleznosci[1].komunikat)})
+                            game.item.pop()
+                            game.item.push(items[parseInt(zaleznosci[1].id2)])
+                            map[game.getPos()].show()
+                            return
+                        }
+                        for(let i = kom.length-1;i>0;i--){
+                            let f=func
+                            func=function(){game.message(kom[i],f)}
+                        }
+                        game.message(kom[0],func)
+                        game.item.pop()
+                        if(!L)
+                            game.item.push(items[parseInt(zaleznosci[id].id2)])
+                    }else{
+                        game.message("Nothing happened")
+                    }
+                }else{
+                    var wygrana = document.getElementById("hiddenimg")
+                    wygrana.src="https://ak6.picdn.net/shutterstock/videos/32435056/thumb/1.jpg"
+                    var div = document.getElementsByClassName("czolowka")[0]
+                    div.style.display="block"
+                }
+                map[game.getPos()].show()
+            }
+        }
+        class Location{
+            constructor(text,image,color,south,north,east,west){
+                this.text = text
+                this.image = image
+                this.color = color
+                this.south = south
+                this.north=north
+                this.east=east
+                this.west=west
+                this.items=[]
+            }
+            show(){
+                var text=document.getElementById("text")
+                var img = document.getElementById("img")
+                var location=document.getElementById("location")
+
+                text.innerText = this.text
+                img.src ="/imgs/drat/"+this.image
+                img.style.backgroundColor=this.color
+                var locTxt = "You can go "
+                var s= document.getElementById("south")
+                var n =document.getElementById("north")
+                var e =document.getElementById("east")
+                var w =document.getElementById("west")
+                s.style.display="block"
+                n.style.display="block"
+                w.style.display="block"
+                e.style.display="block"
+                if(this.south){
+                    locTxt+="South, "
+                    s.style.display="none"
+                }
+                if(this.north){
+                    locTxt+="North, "
+                    n.style.display="none"
+                }
+                if(this.east){
+                    locTxt+="East, "
+                    e.style.display="none"
+                }
+                if(this.west){
+                    locTxt+="West, "
+                    w.style.display="none"
+                }
+                locTxt=locTxt.substring(0,locTxt.length-2)                
+                location.innerText=locTxt
+                location.innerHTML+="</br>You see "
+                if(this.items.length==0){
+                    location.innerText+=" nothing"
+                }else{
+                    var items=" "
+                    this.items.forEach(el=>{
+                        items+=el.what()+", "
+                    })
+                    items=items.substring(0,items.length-2)
+                    location.innerText+=items
+                }
+                game.carrying()
+            }
+
+            take(item){
+                for(var i = 0;i<this.items.length;i++){
+                    if(this.items[i].name==item){
+                        if(this.items[i].flag==1){
+                            var el=this.items[i]
+                            this.items.splice(i,1)
+                            return el
+                        }else{
+                            return -2
+                        }
+                    }
+                }
+                return -1
+            }
+
+            itemsStored(){
+                var i=0
+                this.items.forEach(el=>{
+                    if(el.flag==1){
+                        i++
+                    }
+                })
+                return i
+            }
+        }
+
+
+
+
+        //Preparing objects---------------------------------------------------------
+        var map = {}
+        for (const key in dane) {
+            if (dane.hasOwnProperty(key)) {
+                const element = dane[key];
+                map[key] = new Location(element.text,element.img,element.color,element.south,element.north,element.east,element.west)
+            }
+        }
+        var items={}
+        for (const key in things) {
+            if (things.hasOwnProperty(key)) {
+                const element = things[key];
+                items[key] = new Item(key,element.string,element.flag,element.name)
+            }
+        }
+        
+        map["13"].items.push(items["31"])
+        map["15"].items.push(items["27"])
+        map["17"].items.push(items["14"])
+        map["23"].items.push(items["10"])
+        map["27"].items.push(items["18"])
+        map["32"].items.push(items["32"])
+        map["44"].items.push(items["21"])
+        map["55"].items.push(items["33"])
+        map["64"].items.push(items["24"])
+
+
+
+
+        //"Character" object------------------------------------------------------------
+        var game={
+            position:{y:4,x:7},
+            getPos:function(){return this.position.y + "" + this.position.x},
+            item:[],
+            move:function(direction){
+                switch(direction.toLowerCase()){
+                    case "e":
+                        if(map[game.getPos()].east){
+                            this.position.x+=1
+                            this.message("You are going east...")
+                        }else{this.message("You can't go that way")}
+                    break;
+                    case "w":
+                        if(game.getPos()==42){
+                            if(dragKilled==false){
+                                this.message("You can't go that way... ",()=>{game.message("The dragon sleeps in a cave!")})
+                                break;
+                            }
+                        }
+                        if(map[game.getPos()].west){
+                            this.position.x-=1
+                            this.message("You are going west...")
+                        }else{this.message("You can't go that way")}
+                    break;
+                    case "n":
+                        if(map[game.getPos()].north){
+                            this.position.y-=1
+                            this.message("You are going north...")
+                        }else{this.message("You can't go that way")}
+                    break;
+                    case "s":
+                        if(map[game.getPos()].south){
+                            this.position.y+=1
+                            this.message("You are going south...")
+                        }else{this.message("You can't go that way")}
+                    break;
+                }
+                map[game.getPos()].show()
+            },
+            vocab:function(){
+                var text=document.getElementById("location")
+                text.innerHTML="NORTH or N, SOUTH or S</br>"
+                text.innerHTML+="WEST or W, EAST or E</br>"
+                text.innerHTML+="TAKE (object) or T (object)</br>"
+                text.innerHTML+="DROP (object) or D (object)</br>"
+                text.innerHTML+="USE (object) or U (object)</br>"
+                text.innerHTML+="GOSSIPS or G, VOCABULARY or V</br>"
+                text.innerHTML+="Press any key"
+                document.getElementById("command").onkeydown=function(){
+                    map[game.getPos()].show()
+                    setTimeout(()=>{this.value=""},0)
+                    document.getElementById("command").onkeydown=onkdown
+                }
+            },
+            gossips:function(){
+                var text=document.getElementById("location")
+                text.innerHTML="The  woodcutter lost  his home key...</br>"
+                text.innerHTML+="The butcher likes fruit... The cooper</br>"
+                text.innerHTML+="is greedy... Dratewka plans to make a</br>"
+                text.innerHTML+="poisoned  bait for the dragon...  The</br>"
+                text.innerHTML+="tavern owner is buying food  from the</br>"
+                text.innerHTML+="pickers... Making a rag from a bag...</br>"
+                text.innerHTML+="Press any key"
+                document.getElementById("command").onkeydown=function(){
+                    map[game.getPos()].show()
+                    document.getElementById("command").onkeydown=onkdown
+                    setTimeout(()=>{this.value=""},0)
+                }
+            },
+            action:function(action){
+                var item=""
+                if(action.split(" ")[1]!=undefined)
+                    item = action.split(" ")[1]
+                action=action.split(" ")[0]
+                switch(action.toLowerCase()){
+                    case "east":
+                    case "e":
+                        this.move("e")
+                    break;
+                    case "west":
+                    case "w":
+                        this.move("w")
+                    break;
+                    case "north":
+                    case "n":
+                        this.move("n")
+                    break;
+                    case "south":
+                    case "s":
+                        this.move("s")
+                    break;
+                    case "take":
+                    case "t":
+                        this.take(item)
+                    break;
+                    case "v":
+                    case "vocabulary":
+                        this.vocab()
+                    break;
+                    case "use":
+                    case "u":
+                        this.use(item)
+                    break;
+                    case "drop":
+                    case "d":
+                        this.drop(item)
+                    break;
+                    case "gossips":
+                    case "g":
+                        this.gossips()
+                    break;
+                    case "":
+                    break;
+                    default:
+                        this.message("Try another word or V for vocabulary")
+                }
+            },
+            carrying:function(){
+                var location = document.getElementById("location")
+                if(this.item.length==0){
+                    location.innerHTML+="</br>You are carrying nothing"
+                }else{
+                    location.innerHTML+="</br>You are carrying "+this.item[0].what()
+                }
+            },
+            take:function(item){
+                if(this.item.length==0){
+                    var taken = map[game.getPos()].take(item)
+                    if(taken!=-1){
+                        if(taken!=-2){
+                            this.item.push(taken)
+                            this.message("You are taking "+ taken.what())
+                            map[game.getPos()].show()
+                        } else{
+                            this.message("You cannot carry it")
+                        }
+                    }else{
+                        this.message("There isn't anything like that here")
+                    }
+                } else{
+                    this.message("You can't carry it")
+                }
+                
+            },
+            drop:function(item){
+                if(this.item.length==1){
+                    if(item == this.item[0].name){
+                        if(map[game.getPos()].itemsStored()<3){
+                            map[game.getPos()].items.push(this.item[0])
+                            this.message("You are about to drop "+ this.item.pop().what()) 
+                            map[game.getPos()].show()
+                        } else{
+                            this.message("You cant store any more here")
+                        }
+                    }else{
+                        this.message("You are not carrying it")
+                    }
+                }else{
+                    this.message("You are carrying nothing")
+                }
+            },
+            use:function(item){
+                if(this.item.length==1){
+                    if(item==this.item[0].name){
+                        this.item[0].use(this.getPos())
+                    }else{
+                        this.message("You are not carrying it")
+                    }
+                }else{
+                    this.message("You are not carrying it")
+                }
+            },
+            message:function(msg,callback=()=>{}){
+                var caret = document.getElementById("caret")
+                caret.style.display="none"
+                var input = document.getElementById("command")
+                input.disabled=true
+                var p = document.getElementById("what")
+                p.innerText=msg
+                setTimeout(function(){
+                    p.innerText="What now? "
+                    input.disabled=false
+                    caret.style.display="inline"
+                    callback()
+                    document.getElementById("command").focus()
+                },1000)  
+            }
+        }
+
+
+
+
+        //Start of the game ---------------------------------------------------------------------
+        var lower
+        var backspace
+        var sheepEl=0
+        var dragKilled=false
+        document.addEventListener("DOMContentLoaded", function(){
+            var div = document.createElement("div")
+            var czolowka = document.createElement("img")
+            czolowka.src="http://mendela.pl/2018/16/czołówka.jpg"
+            czolowka.id="hiddenimg"
+            div.append(czolowka)
+            div.classList.add("czolowka")
+            document.body.append(div)
+            var audio = document.getElementById("hejnal")
+            audio.currentTime = 80
+            audio.play();
+            setTimeout(()=>{div.style.display="none"; audio.pause()},15000)
+            setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_A.jpg"},5000)
+            setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_B.jpg"},10000)
+
+            var com =document.getElementById("command")
+            com.onblur=function(e){setTimeout(()=>{this.focus()},0);this.focus()}
+            map[game.getPos()].show()
+
+            var input = document.getElementById("command")
+            lower=false;
+            backspace = false
+            input.onkeydown=onkdown
+            input.onkeyup=onkup
+            input.oninput=comm
+            document.onclick=function(){
+                document.getElementById("command").focus();
+            }
+        },false);
+
+
+
+
+        //Additional functions ------------------------------------------------------------------------
+        function comm(e){
+            if(!backspace){
+                if(!lower){
+                    if(this.value.length>0)
+                        this.value=this.value.substring(0,this.value.length-1)+this.value[this.value.length -1].toUpperCase()
+                }
+                else{
+                    if(this.value.length>0)
+                        this.value=this.value.substring(0,this.value.length-1)+this.value[this.value.length -1].toLowerCase()
+                }
+            }
+            document.getElementById("input").innerText=this.value
+        }
+        function onkup(e){
+            if(e.key=="Shift"){
+                    lower=!lower
+            }else
+            if(e.key=="Backspace"|| e.key=="Delete"){
+                backspace=false
+            }
+        }
+        function onkdown(e){
+            if(e.key=="Enter"){
+                game.action(this.value)
+                this.value=""
+                document.getElementById("input").innerText=""
+            }else
+            if(e.key=="CapsLock"){
+                lower=!lower
+            }else
+            if(e.key=="Shift"){
+                lower=!lower
+            }
+            if(e.key=="Backspace" || e.key=="Delete"){
+                backspace=true
+            }
+            
+        }
+    </script>
+    <style>
+    body{
+        background: black;
+    }
+    input{
+        outline: 0px;
+        background: black;
+        border: 0px;
+        height: 35px;
+        font-size: 15px;
+        color: white;
+        
+    }
+    .czolowka{
+        background: black;
+        display: flex;
+        align-items:center;
+        align-content: center;
+        justify-content: center;
+        position: absolute;
+        top:0;
+        left:0;
+        width: 100%;
+        height: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
+    }
+    @font-face {
+        font-family: "PressStart2P";
+        src: url(/fonts/PressStart2P.ttf) format("truetype");
+    }
+    *{
+        font-family: PressStart2P;
+    }
+    p, input{
+        display: inline;
+    }
+    img{
+        width: 300px;
+        height: 200px;
+        border:1px solid black;
+    }
+    div,p,img{
+        margin:10px;
+    }
+    #compass{
+        display: inline-block;
+        position: relative;
+    }
+    #south{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        bottom: 8px;
+        left: 141px;
+    }
+    #north{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        top:3px;
+        left:135px;
+    }
+    #east{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        right: 17px;
+        top:60px;
+    }
+    #west{
+        display: block;
+        position: absolute;
+        width:18px;
+        height:22px;
+        background: black;
+        top:60px;
+        left:17px;
+    }
+    .czolowka img{
+        width:500px;
+        height: 400px;
+    }
+    *{
+        color:rgb(209, 203, 203);
+    }
+    audio{
+        display: none;
+    }
+    #caret{
+        width:10px;
+        height:35px;
+        background: white;
+    }
+    #caret{
+        display: inline;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+    input{
+        position: absolute;
+        top:-1000px;
+        left:-1000px;
+    }
+    #input{
+        margin-right: 3px;
+    }
+    </style>
+</head>
+<body>
+    <div id="text"></div>
+    <img id="img" alt="obrazek"> <div id="compass"><img src="/imgs/drat/kompas.bmp" alt="kompas" id="comp"><div id="south"></div><div id="north"></div><div id="east"></div><div id="west"></div></div>
+    <div id="location"></div>
+    <p id="what">What now? </p> <input type="text" name="command" id="command" autofocus="autofocus"> <p id="input"></p><div id="caret">A</div>
+    <audio id="hejnal">
+        <source src="/audio/hejnal.mp3" type="audio/mpeg">
+    </audio>
+    <br/>
+    <br/>
+    <a href='/' style=' background: rgb(61, 55, 74);border: 1px solid white;border-radius: 5px;padding:10px 20px;color:white;font-size: 1.6em;cursor: pointer;text-decoration: none;display: inline-block;margin-top: 10px;'>Wróć do strony głównej</a>
+</body>
+</html>

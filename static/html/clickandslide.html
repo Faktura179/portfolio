@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Click and Slide</title>
+</head>
+<script>
+    var gra
+    document.addEventListener("DOMContentLoaded", function(){
+        gra={
+            img:document.createElement("div"),
+            image:0,
+            srcs:["/imgs/zdjecie.jpg","/imgs/zdjecie2.jpg","/imgs/zdjecie3.jpg"],
+            menu:document.createElement("div"),
+            board:document.createElement("div"), 
+            overlay:document.createElement("div"),
+            scores:document.createElement("div"),
+            leftarr:document.createElement("img"),
+            rightarr:document.createElement("img"),
+            sizes:[3,4,5,6],
+            size:3,
+            buttons:[],
+            parts:[],
+            order:[],
+            empty:{x:2,y:2},
+            prevEmpty:{x:-2,y:-2},
+            end: -1,
+            start:0,
+            stop:0,
+            timer:document.createElement("div"),
+            init:function(){
+                this.img.classList.add("slider")
+                var block = document.createElement("div")
+                this.srcs.forEach((item,index)=>{
+                    var img = document.createElement("img")
+                    img.classList.add("image")
+                    img.src=item
+                    block.appendChild(img)
+                })
+                var imga = document.createElement("img")
+                imga.classList.add("imga","image")
+                imga.src=this.srcs[0]
+                block.appendChild(imga)
+                block.style.width=((this.srcs.length+1)*200)+"px"
+                block.style.marginBottom="0"
+                this.img.appendChild(block)
+                this.rightarr.src="/imgs/Strzalka.png"
+                this.rightarr.classList.add("leftArrow")
+                this.rightarr.onclick = (function(self){return function(){self.right()}})(this)
+                this.leftarr.src="/imgs/Strzalka.png"
+                this.leftarr.classList.add("rightArrow")
+                this.leftarr.onclick=(function(self){return function(){self.left()}})(this)
+                document.body.appendChild(this.leftarr)
+                document.body.appendChild(this.img)
+                document.body.appendChild(this.rightarr)
+                this.menu.classList.add("menu")
+                for(let i =0;i < this.sizes.length; i++){
+                    let button = document.createElement("button")
+                    button.innerHTML=this.sizes[i]+"x"+this.sizes[i]
+                    let size = this.sizes[i]
+                    button.onclick=(( size )=>{return ()=>{this.size=size;this.inside()}})(size)
+                    this.buttons.push(button)
+                    this.menu.appendChild(button)
+                }
+                document.body.appendChild(this.menu)
+                window.setInterval((function(self){return function(){self.time()}})(this),1)
+                document.body.appendChild(this.timer)
+                this.board.classList.add("board")
+                document.body.appendChild(this.board)
+
+                var text = document.createElement("div")
+                text.id="text"
+                text.innerText="Wygrałeś!"
+                this.scores.id="highscores"
+                this.overlay.id="overlay"
+                this.overlay.appendChild(text)
+                this.overlay.appendChild(this.scores)
+                this.overlay.onclick=(function(self){return function(){self.overlayOff()}})(this)
+                document.body.appendChild(this.overlay)
+                this.inside()
+                //cookies
+                var date = new Date();
+                document.cookie = "expires=Thu, 18 Dec "+ (date.getFullYear() +10)+" 12:00:00 UTC;";
+                var cookies = document.cookie.split(';').reduce((cookies, cookie) => {
+                const [ name, value ] = cookie.split('=').map(c => c.trim());
+                cookies[name] = value;
+                return cookies;
+                }, {});
+                this.sizes.forEach((item)=>{
+                    if(cookies[item]==undefined){
+                        document.cookie=item+"=[];"
+                    }
+                })
+            },
+            inside:function(){
+                this.board.innerHTML=""
+                for(let i = 0; i<this.size;i++){
+                    this.parts[i]=[]
+                    this.order[i]=[]
+                    for(let j = 0; j<this.size;j++){
+                        let div=document.createElement("div")
+                        div.classList.add("square")
+                        div.style.top=(600/this.size)*i+"px"
+                        div.style.left=(600/this.size)*j+"px"
+                        div.style.width=(600/this.size)+"px"
+                        div.style.height=(600/this.size)+"px"
+                        div.style.backgroundImage="url("+this.srcs[this.image]+")"
+                        div.style.backgroundPositionX=-(600/this.size)*j+"px"
+                        div.style.backgroundPositionY=-(600/this.size)*i+"px"
+                        div.style.backgroundSize="600px 600px"
+                        var that = this
+                        div.onclick=function(e){
+                            e.stopPropagation()
+                            for(let i=0;i<that.parts.length;i++){
+                                var index = that.parts[i].indexOf(this)
+                                if(index!=-1){
+                                    that.swap(index,i)
+                                }
+                            }
+                            that.wygrana()
+                        }
+                        this.board.appendChild(div)
+                        this.parts[i][j]=div
+                        this.order[i][j]=this.size*i+j
+                    }
+                }
+                this.parts[this.size-1][this.size-1].style.background="lightgrey"
+                this.empty.x=this.size-1
+                this.empty.y=this.size-1
+                this.losowanie()
+            },
+            swap:function(x,y){
+                if((this.empty.x==x && this.empty.y==y-1)||(this.empty.x==x && this.empty.y==y+1)||(this.empty.x==x-1 && this.empty.y==y)||(this.empty.x==x+1 && this.empty.y==y)){
+                    var tmpDiv = this.parts[y][x].cloneNode(true)
+                    this.parts[y][x].parentNode.removeChild(this.parts[y][x])
+                    this.parts[y][x]=this.parts[this.empty.y][this.empty.x]
+                    this.parts[this.empty.y][this.empty.x]=tmpDiv
+                    var that = this
+                    tmpDiv.onclick=function(e){
+                        e.stopPropagation()
+                        for(let i=0;i<that.parts.length;i++){
+                            var index = that.parts[i].indexOf(this)
+                            if(index!=-1){
+                                that.swap(index,i)
+                            }
+                        }
+                        that.wygrana()
+                    }
+                    this.board.appendChild(this.parts[this.empty.y][this.empty.x])
+                    var tmpStyle = this.parts[this.empty.y][this.empty.x].cloneNode(true)
+                    var tmpStyle1 = this.parts[y][x].cloneNode(true)
+                    this.parts[this.empty.y][this.empty.x].style.top=tmpStyle1.style.top
+                    this.parts[this.empty.y][this.empty.x].style.left=tmpStyle1.style.left
+                    this.parts[y][x].style.top=tmpStyle.style.top
+                    this.parts[y][x].style.left=tmpStyle.style.left
+
+                    var tmpOrder = this.order[y][x]
+                    this.order[y][x]=this.order[this.empty.y][this.empty.x]
+                    this.order[this.empty.y][this.empty.x]=tmpOrder
+                    
+                    this.prevEmpty.y=this.empty.y
+                    this.prevEmpty.x=this.empty.x
+                    this.empty.y=y
+                    this.empty.x=x
+                }
+            },
+            losowanie:function(){
+                this.end=-1
+                this.stop=0
+                var button = document.getElementsByTagName("button")
+                for(let i =0;i < button.length; i++){
+                    button[i].onclick=""
+                }
+                for(let a=0;a<this.size*this.size*10;a++){
+                    setTimeout(()=>{
+                        var x = -1+Math.floor(Math.random()*3)
+                        var y=0
+                        if(x==0){
+                            while(y==0){
+                                y = -1+Math.floor(Math.random()*3)
+                            }
+                        }
+                        while(this.empty.x+x>=this.size || this.empty.y+y>=this.size || this.empty.x+x<0 || this.empty.y+y<0/**/||this.prevEmpty.x==this.empty.x+x||this.empty.y+y==this.prevEmpty.y/**/){
+                            var x = -1+Math.floor(Math.random()*3)
+                            var y=0
+                            if(x==0){
+                                while(y==0){
+                                    y = -1+Math.floor(Math.random()*3)
+                                }
+                            } 
+                        }
+                        this.swap(this.empty.x+x,this.empty.y+y)
+                        if(this.size*this.size*10-1==a){
+                            this.start = window.performance.now()
+                            this.end=0
+                            for(let i =0;i < button.length; i++){
+                                let size = this.sizes[i]
+                                button[i].onclick=(( size )=>{return ()=>{this.size=size;this.inside()}})(size)
+                            }
+                        }
+                    },a*50)
+                }
+            },
+            wygrana:function(){
+                let win=true
+                for(let i =0;i<this.size;i++){
+                    for(let j =0;j<this.size;j++){
+                        if(this.order[i][j]!=this.size*i+j){
+                            win=false
+                        }
+                    }
+                }
+                if(win){
+                    if(this.stop==0){
+                        this.end=window.performance.now()
+                        var highscores = document.cookie.split(";").find((element)=>{return element.trim()[0]==this.size})
+                        highscores = JSON.parse(highscores.trim().substring(2))
+                        var name  = prompt("Podaj imie: ")
+                        highscores.push({name:name,score:this.end-this.start})
+                        highscores.sort((a, b)=>{return a.score - b.score})
+                        if(highscores.length>10){
+                            highscores.pop()
+                        }
+                        document.cookie = this.size + "=" + JSON.stringify(highscores)+";"
+                        this.scores.innerHTML=""
+                        highscores.forEach((item, index)=>{
+                            var time=item.score
+                            var miliseconds = Math.floor(time)%1000
+                            var seconds = (Math.floor(time/1000))%(60)
+                            var minutes = (Math.floor(time/(1000*60)))%(60)
+                            var hours = (Math.floor(time/(1000*60*60)))%(60)
+                            this.scores.innerHTML+=(index+1) + ". " + item.name+": "+hours+":"+minutes+":"+seconds+"."+miliseconds+"<br>"
+                        })
+                        this.overlayOn()
+                    }
+                    this.stop=1
+                    
+                }
+            },
+            time:function(){
+                this.timer.innerHTML=""
+                var time
+                if(this.end==-1){
+                    time=0
+                }
+                else if(this.end==0){
+                    time=window.performance.now()-this.start
+                }
+                else{    
+                    time=this.end-this.start
+                }
+                var miliseconds = Math.floor(time)%1000
+                var seconds = (Math.floor(time/1000))%(60)
+                var minutes = (Math.floor(time/(1000*60)))%(60)
+                var hours = (Math.floor(time/(1000*60*60)))%(60)
+                //this.timer.innerHTML=hours+":"+minutes+":"+seconds+"."+miliseconds
+                var img = document.createElement("img")
+                img.classList.add("numbers")
+                img.src="/imgs/cyferki/colon.gif"
+                var img1 = document.createElement("img")
+                img1.classList.add("numbers")
+                img1.src="/imgs/cyferki/colon.gif"
+                var img2 = document.createElement("img")
+                img2.classList.add("numbers")
+                this.timer.appendChild(this.getNumImg(Math.floor(hours/10)))
+                this.timer.appendChild(this.getNumImg(hours%10))
+                this.timer.appendChild(img)
+                this.timer.appendChild(this.getNumImg(Math.floor(minutes/10)))
+                this.timer.appendChild(this.getNumImg(minutes%10))
+                this.timer.appendChild(img1)
+                this.timer.appendChild(this.getNumImg(Math.floor(seconds/10)))
+                this.timer.appendChild(this.getNumImg(seconds%10))
+                img2.src="/imgs/cyferki/dot.gif"
+                this.timer.appendChild(img2)
+                this.timer.appendChild(this.getNumImg(Math.floor(miliseconds/100)))
+                this.timer.appendChild(this.getNumImg(Math.floor((miliseconds/10)%10)))
+                this.timer.appendChild(this.getNumImg(miliseconds%10))             
+            },
+            overlayOff:function(){
+                this.overlay.style.display="none"
+            },
+            overlayOn:function(){
+                this.overlay.style.display="block"
+            },
+            getNumImg:function(number){
+                var img = document.createElement("img")
+                img.classList.add("numbers")
+                for(var i =0; i<10;i++){
+                    if(number==i){
+                        img.src="/imgs/cyferki/c"+i+".gif"
+                    }
+                }
+                return img
+            },
+            left:function(){
+                this.image+=1               
+                if(this.image>=this.srcs.length){
+                    for(let i =0; i<101;i++){
+                        setTimeout(()=>{
+                            this.img.scrollLeft+=2
+                            if(i==100){
+                                this.img.scrollLeft=0
+                            }
+                    },i*5)
+                    this.image=0
+                }
+                    //this.img.scrollLeft=0                     
+                }else{
+                    for(let i =0; i<100;i++){
+                        setTimeout(()=>{
+                            this.img.scrollLeft+=2
+                    },i*5)
+                }
+                }          
+            },
+            right:function(){
+                this.image-=1
+                if(this.image<0){
+                    this.image=this.srcs.length-1
+                    this.img.scrollLeft=this.srcs.length*200
+                }
+                for(let i =0; i<100;i++){
+                    setTimeout(()=>{
+                        this.img.scrollLeft-=2
+                    },i*5)
+                }
+            }
+        }
+        gra.init()
+
+
+        function htmlToElement(html) {
+            var template = document.createElement('template');
+            html = html.trim(); // Never return a text node of whitespace as the result
+            template.innerHTML = html;
+            return template.content.firstChild;
+        }
+        var a = htmlToElement("<a href='/' style=' background: rgb(61, 55, 74);border: 1px solid white;border-radius: 5px;padding:10px 20px;color:white;font-size: 1.6em;cursor: pointer;text-decoration: none;display: inline-block;margin-top: 10px;'>Wróć do strony głównej</a>")
+        document.body.appendChild(a)
+    })
+</script>
+<style>
+    div{
+        text-align: center;
+        margin-bottom:20px;
+    }
+    .image{
+        display: inline-block;
+        width:200px;
+        height:200px;
+    }
+    .slider{
+        width: 200px;
+        overflow: hidden;
+        margin:0 auto;
+    }
+    .menu{    
+        display:flex;
+        justify-content: center;
+        margin: auto;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    button{
+        text-align: center;
+        margin:10px;
+        width:50px;
+    }
+    .board{
+        position: relative;
+        width:600px;
+        height: 600px;
+        border:1px solid black;
+        margin:auto;
+    }
+    .square{
+        position: absolute;
+        box-sizing: border-box;
+        border:1px solid black;
+    }
+    #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 2;
+        cursor: pointer;
+    }
+
+    #text{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+    }
+    #highscores{
+        position: absolute;
+        top: 65%;
+        left: 50%;
+        font-size: 15px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+    }
+    .numbers{
+        height:25px;
+    }
+    .rightArrow{
+        width: 50px;
+        height: 25px;
+        position:absolute;
+        transform: rotate(180deg);
+        top:10%;
+        right:35%;
+        cursor: pointer;
+    }
+    .leftArrow{
+        width: 50px;
+        height: 25px;
+        position:absolute;
+        top:10%;
+        left:35%;
+        cursor: pointer;
+    }
+    .imga{
+        clear: both;
+    }
+    body{
+            background: #191E30;
+            text-align: center;
+        }
+</style>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Statki</title>
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background: #191E30;
+            text-align: center;
+        }
+        #main{
+            position: absolute;
+            top:40px;
+            left:780px;
+        }
+        .pole{
+            border: 1px solid black;
+            width:40px;
+            height:40px;
+            float:left;
+            background: #fff;
+        }
+        .pole:nth-child(10n+1){
+            clear: both;
+        }
+        .black{
+            background-color: black;
+        }
+        .red{
+            background-color: red !important;
+        }
+        .green{
+            background-color: green;
+        }
+        #gracz{
+            position: absolute;
+            top:40px;
+            left:340px;
+        }
+        #maszty td{
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+        }
+        #maszty tr{
+            margin-top: 40px;
+        }
+        #maszty{
+            margin:40px;
+            border-collapse: collapse;
+        }
+        .button{
+            position: absolute;
+            top:500px;
+            left:500px;
+            font-size: 1.5em;
+            font-weight: 500;
+        }
+        .maszt{
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main"></div>
+    <div id="gracz"></div>
+
+    <table id="maszty"></table>
+
+    <script>
+        function wygrana(strzaly,statki){
+            let indeksy = []
+            for(let i = 0; i <statki.length;i++){
+                for(let j=0;j<statki[i].length;j++){
+                    if(statki[i][j]==1){
+                        indeksy.push((i-1)*10+j-1)}
+                }
+            }
+            let wygrana=true
+            indeksy.forEach((item,index)=>{
+                let y = Math.floor(item/10)
+                let x = item%10
+                if(strzaly[y][x]!=1){
+                    wygrana=false}
+            })
+            return wygrana
+        }
+        var statki={
+            maszty:[4,3,3,2,2,2,1,1,1,1],
+            plansza:[],
+            strzaly:[],
+            rozpocznij:function(){
+                this.zerujPlansze()
+                this.losujStatki()
+                //this.rysujTabele()
+            },
+            rysujTabele: function(){
+                document.getElementById("main").innerHTML=""
+                for(let i = 1; i<11;i++){
+                    for(let j = 1; j<11;j++){
+                        var div = document.createElement("div")
+                        div.className="pole"
+                        /*if(this.plansza[i][j]!=0){
+                            div.classList.add("black")
+                        }*/
+                        document.getElementById("main").append(div)
+                    }
+                }
+            },
+            zerujPlansze:function(){
+                for (let i = 0;i < 12;i++) {
+                    this.plansza[i]=[]
+                    for(let j =0;j<12;j++){
+                        this.plansza[i][j]=0
+                    }                        
+                }
+                for (let i = 0; i < 10; i++) {
+                    this.strzaly[i]=[];
+                    for(let j =0;j<10;j++){
+                        this.strzaly[i][j]=0
+                    } 
+                }
+            },
+            losujStatki:function(){
+                this.maszty.forEach(function(item,index){
+                    while(true){
+                        let Y = 1+Math.floor(Math.random()*10)
+                        let X = 1+Math.floor(Math.random()*10)
+                        let kierunek = Math.floor(Math.random()*2) //0 poziom, 1 pion
+                        let zajete = false
+                        if(kierunek==0){
+                            if(X+item>=11){
+                                continue
+                            }
+                            for(let i=-1;i<2;i++){
+                                for(let j=-1;j<=item;j++){
+                                    if(Y+i>=12 || X+j>=12){
+                                        zajete=true
+                                        break
+                                    }
+                                    if(this.plansza[Y+i][X+j]==1){
+                                        zajete=true
+                                        break;
+                                    }
+                                }
+                                if(zajete){
+                                    break
+                                }
+                            }
+                        }else if(kierunek==1){
+                            if(Y+item>=11){
+                                continue
+                            }
+                            for(let i = -1;i<=item;i++){
+                                for(let j =-1; j<2;j++){
+                                    if(Y+i>=12 || X+j>=12){
+                                        zajete=true
+                                        break
+                                    }
+                                    if(this.plansza[Y+i][X+j]==1){
+                                        zajete=true
+                                        break;
+                                    }
+                                }
+                                if(zajete){
+                                    break
+                                }
+                            }
+                        }
+                        if(!zajete){
+                            if(kierunek==0){
+                                for(let i =0;i<item;i++){
+                                    this.plansza[Y][X+i]=1
+                                }
+                            }
+                            else if(kierunek==1){
+                                for(let i =0;i<item;i++){
+                                    this.plansza[Y+i][X]=1
+                                } 
+                            }
+                            break
+                        }
+                    }
+                },this)
+                this.rysujTabele()
+            },strzelaj:function(){
+                let children = document.getElementById("main").children
+                for(let i=0;i<100;i++){
+                    children[i].onclick=""
+                }
+                document.getElementById("main").onclick=()=>{alert("Ruch komputera")}
+                setTimeout(function(){
+                    let children = document.getElementById("gracz").children
+                    // while(true){
+                    //     let y = losujY()
+                    //     let x = losujX()
+                    //     if(statki.strzaly[y-1][x-1]==0){
+                    //         statki.strzaly[y-1][x-1]=1
+
+                    //         if(gracz.plansza[y][x]==1){
+                    //             children[((y-1)*10+x-1)].style.backgroundColor="green"
+                    //         }else{
+                    //             children[((y-1)*10+x-1)].style.backgroundColor="red"
+                    //         }
+                    //         break;
+                    //     }
+                    // }
+                    strzalKomputera()
+                    if(wygrana(statki.strzaly,gracz.plansza)){
+                        children = document.getElementById("main").children
+                        alert("Komputer wygrał")
+                        for(let i=0;i<100;i++){
+                            children[i].onclick=""
+                        }
+                        return
+                    }
+                    document.getElementById("main").onclick=""
+                    children = document.getElementById("main").children
+                    for(let i=0;i<100;i++){
+                        children[i].onclick=dzieci(i)
+                    }
+                },1000)
+                
+            }
+        }
+        function over (e){
+            let x=parseInt(e.target.getAttribute("x"))
+            let y=parseInt(e.target.getAttribute("y"))
+            let item = gracz.maszty[gracz.zaznaczonyMaszt]
+            let kierunek = gracz.kierunek
+            
+            if(x+item>10 && kierunek){
+                x=11-item
+            }
+            if(y+item>10 && !kierunek){
+                y=11-item
+            }
+
+            let zajete = false
+            if(kierunek){
+                for(let i=-1;i<2;i++){
+                    for(let j=-1;j<=item;j++){
+                        if(y+i>=12 || x+j>=12){
+                            zajete=true
+                            break
+                        }
+                        if(gracz.plansza[y+i][x+j]==1){
+                            zajete=true
+                            break;
+                        }
+                    }
+                    if(zajete){
+                        break
+                    }
+                }
+            }else if(!kierunek){
+                for(let i = -1;i<=item;i++){
+                    for(let j =-1; j<2;j++){
+                        if(y+i>=12 || x+j>=12){
+                            zajete=true
+                            break
+                        }
+                        if(gracz.plansza[y+i][x+j]==1){
+                            zajete=true
+                            break;
+                        }
+                    }
+                    if(zajete){
+                        break
+                    }
+                }
+            }
+            gracz.zajete=zajete
+            if(zajete){
+                let dlugosc=gracz.maszty[gracz.zaznaczonyMaszt]
+                if(kierunek){
+                    for(let i =0;i<dlugosc; i++){
+                        document.getElementsByClassName(((y-1)*10+x-1+i))[0].classList.add("red")
+                    }
+                } else{
+                    for(let i =0;i<dlugosc; i++){
+                        document.getElementsByClassName(((y-1+i)*10+x-1))[0].classList.add("red")
+                    }
+                }
+            }else{
+                let dlugosc=gracz.maszty[gracz.zaznaczonyMaszt]
+                if(kierunek){
+                    for(let i =0;i<dlugosc; i++){
+                        document.getElementsByClassName(((y-1)*10+x-1+i))[0].classList.add("green")
+                    }
+                } else{
+                    for(let i =0;i<dlugosc; i++){
+                        document.getElementsByClassName(((y-1+i)*10+x-1))[0].classList.add("green")
+                    }
+                }
+            }
+            gracz.rysujMaszty()
+        }
+        function out(e){
+            gracz.rysujTabele()
+        }
+        function context(e){
+            e.preventDefault()
+            gracz.kierunek=!gracz.kierunek
+            gracz.rysujTabele()
+        }
+        function click(e){
+            if(!gracz.zajete){
+                let x=parseInt(e.target.getAttribute("x"))
+                let y=parseInt(e.target.getAttribute("y"))
+                let item = gracz.maszty[gracz.zaznaczonyMaszt]
+                let kierunek = gracz.kierunek
+
+                if(x+item>10 && kierunek){
+                    x=11-item
+                }
+                if(y+item>10 && !kierunek){
+                    y=11-item
+                }
+
+                if(kierunek){
+                    for(let i =0;i<item; i++){
+                        gracz.plansza[y][x+i]=1
+                    }
+                }else{
+                    for(let i =0;i<item; i++){
+                        gracz.plansza[y+i][x]=1
+                    }
+                }
+                gracz.maszty.splice(gracz.zaznaczonyMaszt,1)
+                gracz.zaznaczonyMaszt=0
+                gracz.rysujMaszty()
+                gracz.rysujTabele()
+                if(gracz.maszty.length==0){
+                    gracz.buttonStart()
+                }
+            }
+        }
+        function dzieci(i){
+            return function(e){
+                e.stopPropagation()
+                let y=Math.floor(i/10+1)
+                let x = i%10+1
+                if(gracz.strzaly[y-1][x-1]==0){
+                    gracz.strzaly[y-1][x-1]=1
+                    if(statki.plansza[y][x]==1){
+                        this.style.backgroundColor="green"
+                        if(wygrana(gracz.strzaly,statki.plansza)){
+                            alert("Wygrałeś. Kliknij ok celem rewanżu")
+                            location.reload()
+                        }
+                    }else{
+                        this.style.backgroundColor="red"
+                    }
+                    statki.strzelaj()
+                }else{
+                    alert("Pole zajete")
+                }
+                
+            }
+        }
+        var gracz={
+            maszty:[4,3,3,2,2,2,1,1,1,1],
+            strzaly:[],
+            zaznaczonyMaszt:0,
+            kierunek:true,
+            zajete:true,
+            plansza:[],
+            startGry:function(){
+                for (let i = 0; i < 10; i++) {
+                    this.strzaly[i]=[];
+                    for(let j =0;j<10;j++){
+                        this.strzaly[i][j]=0
+                    } 
+                }
+                document.getElementById("gracz").addEventListener("click",()=>{alert("Zla plansza")},false)
+                document.getElementById("gracz").removeEventListener("mouseover",over)
+                document.getElementById("gracz").removeEventListener("mouseout",out)
+                document.getElementById("gracz").removeEventListener("contextmenu",context)
+                document.getElementById("gracz").removeEventListener("click",click)
+                let children = document.getElementById("main").children
+                for(let i=0;i<100;i++){
+                    children[i].onclick=dzieci(i)
+                }
+            },
+            buttonStart:function(){
+                let button = document.createElement("button")
+                button.innerHTML="Rozpocznij gre"
+                button.className = "button"
+                button.onclick=function(){
+                    gracz.startGry()
+                    this.parentNode.removeChild(this)
+                }
+                document.body.append(button)
+            },
+            rozpocznij:function(){
+                this.zerujPlansze()
+                this.rysujTabele()
+                this.rysujMaszty()
+                this.dodajListenery()
+            },
+            dodajListenery:function(){
+                document.getElementById("gracz").addEventListener("mouseover",over,false)
+                document.getElementById("gracz").addEventListener("mouseout",out,false)
+                document.getElementById("gracz").addEventListener("contextmenu",context,false)
+                document.getElementById("gracz").addEventListener("click",click,false)
+            },
+            rysujTabele: function(){
+                document.getElementById("gracz").innerHTML=""
+                for(let i = 1; i<11;i++){
+                    for(let j = 1; j<11;j++){
+                        var div = document.createElement("div")
+                        div.className="pole " + ((i-1)*10+j-1)
+                        div.setAttribute("x",j)
+                        div.setAttribute("y",i)
+                        if(this.plansza[i][j]==1){
+                            div.classList.add("black")
+                        }
+                        document.getElementById("gracz").append(div)
+                    }
+                }
+            },
+            zerujPlansze:function(){
+                for (let i = 0;i < 12;i++) {
+                    this.plansza[i]=[]
+                    for(let j =0;j<12;j++){
+                        this.plansza[i][j]=0
+                    }                        
+                }
+            },
+            rysujMaszty:function(){
+                document.getElementById("maszty").innerHTML=""
+                this.maszty.forEach(function(item,index){
+                    tr = document.createElement("tr")
+                    tr.classList.add("maszt")
+                    if(gracz.zaznaczonyMaszt==index){
+                        tr.style.backgroundColor="blue"
+                    }
+                    for(let i =0;i<item;i++){
+                        td = document.createElement("td")
+                        tr.append(td)
+                    }
+                    tr.onmouseover=function(e){
+                        this.style.backgroundColor="grey"
+                        if(gracz.zaznaczonyMaszt==index){
+                            this.style.backgroundColor="blue"
+                        }
+                    }
+                    tr.onmouseout=function(){
+                        this.style.backgroundColor="white"
+                        if(gracz.zaznaczonyMaszt==index){
+                            this.style.backgroundColor="blue"
+                        }
+                    }
+                    tr.addEventListener("click",function(){
+                        gracz.zaznaczonyMaszt=index
+                        gracz.rysujMaszty()
+                        
+                    },false)
+
+                    document.getElementById("maszty").append(tr)
+
+                    tr1=document.createElement("tr")
+                    td1=document.createElement("td")
+                    td1.style.border="0px"
+                    td1.style.height="20px"
+                    tr1.append(td1)
+                    document.getElementById("maszty").append(tr1)
+                },this)
+            }
+        }
+        gracz.rozpocznij();
+        statki.rozpocznij();
+
+        function losujPunkt(){
+            let x = 1+Math.floor(Math.random()*10)
+            let y = 1+Math.floor(Math.random()*10)
+            
+            return {x:x,y:y}
+        }
+        function strzalKomputera(){
+            let children = document.getElementById("gracz").children
+            while(true){
+                let punkt = losujPunkt()
+                let y = punkt.y
+                let x = punkt.x
+                if(statki.strzaly[y-1][x-1]==0){
+                    statki.strzaly[y-1][x-1]=1
+                    
+                    if(gracz.plansza[y][x]==1){
+                        children[((y-1)*10+x-1)].style.backgroundColor="green"
+                    }else{
+                        children[((y-1)*10+x-1)].style.backgroundColor="red"
+                    }
+                    break;
+                }
+            }
+        }
+    </script>
+
+    <a href="/" style=" background: rgb(61, 55, 74);
+    border: 1px solid white;
+    border-radius: 5px;
+    padding:10px 20px;
+    color:white;
+    font-size: 1.6em;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;">Wróć do strony głównej</a>
+
+</body>
+</html>

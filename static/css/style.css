@@ -110,8 +110,11 @@ h4{
     box-shadow: 0 0 3px #999999;
 }
 .projekt img{
+    margin-top: 20px;
     width:200px;
-    height:250px;
+    height:230px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #777;
 }
 
 #contact{

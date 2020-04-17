@@ -17,6 +17,10 @@ var extensions={
     png:"image/png",
     pdf:"application/pdf",
     ico:"image/x-icon",
+    gif:"image/gif",
+    bmp:"image/bmp",
+    ttf:"application/x-font-ttf",
+    
 }
 var transporter = nodemailer.createTransport({
     service: 'localhost',
@@ -29,13 +33,18 @@ var transporter = nodemailer.createTransport({
   
 
 function readFiles(req,res){
+    var ext = req.url.split(".")[req.url.split(".").length-1]
+    if(ext == req.url){
+        req.url+=".html"
+        ext="html"
+    }
     fs.readFile(__dirname+"/static"+req.url,function(err,data){
         if(err){
             res.writeHead(404)
             res.write(er404)
             return res.end()
         }
-        var ext = req.url.split(".")[req.url.split(".").length-1]
+        
         res.writeHead(200, { "content-type": extensions[ext] })
         res.write(data)
         res.end()
