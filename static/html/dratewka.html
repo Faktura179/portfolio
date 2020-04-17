@@ -389,7 +389,7 @@
         document.addEventListener("DOMContentLoaded", function(){
             var div = document.createElement("div")
             var czolowka = document.createElement("img")
-            czolowka.src="http://mendela.pl/2018/16/czołówka.jpg"
+            czolowka.src="/imgs/drat/czolowka.jpg"
             czolowka.id="hiddenimg"
             div.append(czolowka)
             div.classList.add("czolowka")
@@ -398,8 +398,8 @@
             audio.currentTime = 80
             audio.play();
             setTimeout(()=>{div.style.display="none"; audio.pause()},15000)
-            setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_A.jpg"},5000)
-            setTimeout(()=>{czolowka.src="http://mendela.pl/2018/16/opis_B.jpg"},10000)
+            setTimeout(()=>{czolowka.src="/imgs/drat/A.jpg"},5000)
+            setTimeout(()=>{czolowka.src="/imgs/drat/B.jpg"},10000)
 
             var com =document.getElementById("command")
             com.onblur=function(e){setTimeout(()=>{this.focus()},0);this.focus()}
@@ -586,5 +586,6 @@
     <br/>
     <br/>
     <a href='/' style=' background: rgb(61, 55, 74);border: 1px solid white;border-radius: 5px;padding:10px 20px;color:white;font-size: 1.6em;cursor: pointer;text-decoration: none;display: inline-block;margin-top: 10px;'>Wróć do strony głównej</a>
+    <div style="font-size: 8px;">Game by Mr. Maciej :)</div>
 </body>
 </html>
