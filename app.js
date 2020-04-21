@@ -67,7 +67,7 @@ var server = http.createServer(function (req, res) {
                     console.log(json)
                     var mailOptions = {
                         from: 'contact@rafalfatula.com',
-                        to: 'rfatula12@gmail.com',
+                        to: 'fatula.rafal@gmail.com',
                         subject: 'Wiadomość od '+json.name,
                         text: json.message +'\n'+"Wysłane od: "+json.email
                       };
