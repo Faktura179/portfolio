@@ -15,9 +15,10 @@ pm2.connect(function(err) {
     if (err) throw err
   });
 
-  setTimeout(function() {
+  setTimeout(function worker() {
     console.log("Restarting lego...");
     pm2.restart('lego', function() {});
+    setTimeout(worker, 1000 * 60 * 30)
   }, 1000 * 60 * 30);
 
 });
