@@ -1,0 +1,188 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+    font-family: 'Srisakdi', cursive;
+    font-family: 'Overpass', sans-serif;
+}
+body{
+    height: 100vh;
+    
+}
+#sidebar{
+    width:40px;
+    height: 100%;
+    float: left;
+    overflow: auto;
+    background-color:lightblue; 
+}
+#playlist{
+    height: 40px;
+    background: url("obrazki/playlist.png") rgb(0, 0, 255);
+    background-size: 40px;  
+    cursor: pointer;
+    margin-bottom: 2px; 
+}
+#visual{
+    height: 40px;
+    background: url("obrazki/visual.png") rgb(0, 0, 255);
+    background-size: 40px;  
+    cursor: pointer;
+
+}
+#wrapper{
+    overflow: hidden;
+  height: 100%;
+  padding-bottom: 100px;
+  box-sizing: border-box;
+}
+#content{
+    height:100%;
+    overflow:hidden;
+}
+#albums{
+    width:200px;
+    float: left;
+    height: 100%;
+    overflow: auto;
+}
+#inner{
+    overflow:hidden;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}
+#head{
+    text-align: center;
+    font-size: 2em;
+    flex: 0 1 50px;
+}
+#songs{
+    height: 100%;
+    overflow:auto;
+    flex: 1 1 auto;
+}
+#footer{
+    margin-bottom:-100px; 
+    width:100%;
+    height:100px;
+    background:rgb(56, 153, 243);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+.song{
+    height: 100px;
+    flex-direction:row;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgb(224, 224, 224);
+}
+.img{
+    width:100%;
+    cursor: pointer;
+}
+.inner_song{
+    border: 0px;
+    display: inline-flex;
+    align-items: center;
+}
+.play_pause{
+    background-size: 50px 50px;
+    background-repeat: space;
+    cursor: pointer;
+}
+.add_to_playlist{
+    width: 50px;
+    height: 50px;
+    background: url("obrazki/add.png");
+    background-size: 50px;
+    cursor: pointer;
+}
+.btns{
+    display: none;
+}
+audio, source{
+    display: none;
+}
+#footer .play_pause{
+    background-size: 70px;
+    margin-left:50px;
+    margin-right: 50px;
+}
+#footer>div{
+    border:none;
+    
+}
+#footer>div>div{
+    display: inline-flex;
+    width: 75px;
+    height: 75px;
+    border-radius: 35px;
+}
+#prev{
+    background-image: url("/obrazki/back.png");
+    background-size: 70px 60px;
+    background-repeat: space;
+    background-position: center;
+    background-position-x: -2px;
+}
+#next{
+    background-image: url("/obrazki/forward.png");
+    background-size: 70px 60px;
+    background-repeat: space;
+    background-position: center;
+    background-position-x: 5px;
+}
+#controls{
+    width:340px;
+    position: relative;
+}
+#time{
+    width:100px;
+}
+#info{
+    width:300px;
+}
+#length#length {
+    position: absolute;
+    width: 200px;
+    height:5px;
+    background: lightgreen;
+    top:-10px;
+    left:50%;
+    margin-left:-100px;
+}
+#progress#progress{
+    position: absolute;
+    width: 0px;
+    height: 5px;
+    background: green;
+    top:-10px;
+    left:50%;
+    margin-left:-100px;
+    
+}
+#root{
+    display: none;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left:0;
+    background: white;
+}
+#normal{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 40px;
+    height: 40px;
+    background: url("obrazki/note.png"), lightgrey;
+    background-size:  40px 35px;
+    background-position-y: 2px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Srisakdi" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Overpass" rel="stylesheet"> 
+    <script src="stats.js"></script>
+    <script src="jQuery.js"></script>
+    <script src="three.js"></script>
+    <script src="Song.js"></script>
+    <script src="Net.js"></script>
+    <script src="Ui.js"></script>
+    <script src="Music.js"></script>
+    <script src="Visual.js"></script>
+    <script src="Main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="sidebar"><div id="playlist"></div><div id="visual"></div></div>
+    <div id="wrapper">
+        <div id="content">
+            <div id="albums"></div>
+            <div id="inner">
+                <div id="head">MP3</div>
+                <div id="songs"></div>
+            </div>
+        </div>
+        <div id="footer">
+            <audio id="audio" controls>
+            <source src=""
+                    id="audio_src"
+                    type="audio/mp3" />
+            </audio>
+            <div id="info">album/song</div>
+            <div id="controls">
+                <div id="length"></div>
+                <div id="progress"></div>
+                <div id="prev"></div>
+                <div class="play_pause"></div>
+                <div id="next"></div>
+            </div>
+            <div id="time">time</div>
+        </div>
+    </div>
+    <div id="root"><div id="normal"></div></div>
+</body>
+</html>

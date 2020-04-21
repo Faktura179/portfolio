@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Warcaby</title>
+    <link rel="stylesheet" href="style/style.css">
+    <script src="lib/jQuery.js"></script>
+    <script src="lib/three.js"></script>
+    <script src="lib/OrbitControls.js"></script>
+    <script src="Pionek.js"></script>
+    <script src="Ui.js"></script>
+    <script src="Net.js"></script>
+    <script src="Game.js"></script>
+    <script src="Main.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <div id="status">STATUS</div>
+    <div id="window">
+        <div id="login">
+            <div class="txt">LOGOWANIE</div>
+            <input type="text" name="nick" id="nick">
+            <button id="loguj">Loguj</button>
+            <button id="reset">Reset</button>
+        </div>
+        <div id="waiting">
+            Wainting for the other player
+        </div>
+    </div>
+    <div id="move">
+        <div class="enemyMove">Wait for the enemy to move</div>
+    </div>
+    <div id="stan"><pre id="tablica"></pre></div>
+</body>
+</html>
