@@ -62,10 +62,9 @@ var server = http.createServer(function (req, res) {
         });
 
         req.on('end', function() {
-            var json = qs.parse(body)
+            var json = JSON.parse(body) 
             switch(req.url){
                 case "/contactme":
-                    console.log(json)
                     var mailOptions = {
                         from: 'contact@rafalfatula.com',
                         to: 'fatula.rafal@gmail.com',
