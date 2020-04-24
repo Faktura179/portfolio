@@ -26,9 +26,8 @@ var transporter = nodemailer.createTransport({
     host: 'localhost',
     auth: {
       user: 'contact@rafalfatula.com',
-      pass: pass.password
+      pass: pass.pass
     },
-    secure:true,
     port:587
   });
   
