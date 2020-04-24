@@ -9,6 +9,8 @@
   "author": "Rafał Fatuła",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy-middleware": "^1.0.3",
     "nodemailer": "^6.4.6"
   }
 }
