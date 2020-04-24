@@ -23,7 +23,7 @@ var extensions={
     
 }
 var transporter = nodemailer.createTransport({
-    host: 'localhost',
+    host: 'rafalfatula.com',
     auth: {
       user: 'contact@rafalfatula.com',
       pass: pass.pass
