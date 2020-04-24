@@ -13,7 +13,7 @@ class Net {
 
     init(){
         $.ajax({
-            url: "/mp3/first",
+            url: "/first",
             data: {  },
             type: "POST",
             success: function (data) {
@@ -33,7 +33,7 @@ class Net {
     sendData(album) {
         // tutaj wysłanie danych ajaxem na serwer
         $.ajax({
-            url: "/mp3/second",
+            url: "/second",
             data: { album:this.albums[album] },
             type: "POST",
             success: function (data) {
@@ -50,7 +50,7 @@ class Net {
     }
     addToPlaylist(song,album){
         $.ajax({
-            url: "/mp3/add",
+            url: "/add",
             data: { album:album,song:song },
             type: "POST",
             success: function (data) {
@@ -67,7 +67,7 @@ class Net {
     }
     getPlaylist(){
         $.ajax({
-            url: "/mp3/playlist",
+            url: "/playlist",
             data: { },
             type: "POST",
             success: function (data) {
