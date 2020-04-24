@@ -9,7 +9,6 @@ pm2.connect(function(err) {
   pm2.start({
     script    : 'server.js',         // Script to be run
     name: "lego",
-    max_memory_restart : '10M'   // Optional: Restarts your app if it reaches 100Mo
   }, function(err, apps) {
     pm2.disconnect();   // Disconnects from PM2
     if (err) throw err
@@ -18,8 +17,8 @@ pm2.connect(function(err) {
   setTimeout(function worker() {
     console.log("Restarting lego...");
     pm2.restart('lego', function() {});
-    setTimeout(worker, 1000 * 60 * 30)
-  }, 1000 * 60 * 30);
+    setTimeout(worker, (1000 * 60 * 30))
+  }, (1000 * 60 * 30));
 
 });
 
