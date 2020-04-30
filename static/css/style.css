@@ -11,7 +11,8 @@ nav{
     position: fixed;
     width: 100%;
     padding:1px 0;
-    max-height:60px
+    max-height:60px;
+    z-index: 10;
 }
 nav ul{
     list-style-type: none;
@@ -48,10 +49,14 @@ h2{
     font-size: 1.2em;
     background: rgb(40, 40, 50);
     margin-bottom: 20px;
+    overflow:hidden;
 }
 
 section{
     margin:50px 0;
+}
+section:first-child{
+    margin-top: 0;
 }
 section:last-of-type{
     margin-bottom: 0;
@@ -72,6 +77,37 @@ section > div{
     background: #303840;
     text-align: center;
 }
+
+#tech{
+    background: #303840;
+}
+.technologie{
+    margin:10px;
+    display: flex;
+    justify-content: center;
+    flex-wrap:wrap;
+}
+.technologia{
+    background: #3D374A;
+    /*border: 1px solid white;*/
+    border-radius: 5px;
+    padding: 15px;
+    margin:15px;
+   
+
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    box-shadow: 0 0 5px rgb(78, 86, 94);
+    justify-content: center;
+    align-items: center;
+}
+.technologia img{
+    width:200px;
+    border-radius: 5px;
+    /*box-shadow: 0 0 5px #777;*/
+}
+
 #portfolio{
     background: #303840;
 }
@@ -114,7 +150,7 @@ h4{
     width:200px;
     height:230px;
     border-radius: 5px;
-    box-shadow: 0 0 5px #777;
+    box-shadow: 0 0 7px #777;
 }
 
 #contact{
