@@ -136,11 +136,21 @@ section > div{
 }
 
 .moonbackground{
+    position: relative;
     display: inline-block;
     padding:20px;
     background: rgb(81, 64, 117);
     border-radius: 2px;
     border:1px solid rgb(190, 41, 63);
+}
+
+.moonbackground span{
+    position: absolute;
+    font-weight: normal;
+    top:28px;
+    left:52px;
+    font-size: 50px;
+    font-family: Poppins;
 }
 
 .moon{
